@@ -24,7 +24,7 @@ CREATE TABLE sessions (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE chats (
+CREATE TABLE chats (
   id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   session_id UUID        NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
   role       TEXT        NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
