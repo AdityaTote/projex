@@ -13,7 +13,7 @@
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/projex.git
+git clone https://github.com/AdityaTote/projex.git
 cd projex
 ```
 
@@ -28,7 +28,7 @@ Before running anything, register your app on Zoho.
 3. Fill in:
    - **Client Name**: Projex
    - **Homepage URL**: `http://localhost:3000`
-   - **Authorized Redirect URIs**: `http://localhost:8080/auth/callback`
+   - **Authorized Redirect URIs**: `http://localhost:3000/auth/callback`
 4. Click **Create**
 5. Copy the **Client ID** and **Client Secret**
 
@@ -61,7 +61,7 @@ JWT_EXPIRES_MINUTES=1440
 ZOHO_CLIENT_ID=your-zoho-client-id
 ZOHO_CLIENT_SECRET=your-zoho-client-secret
 ZOHO_ACCESS_TYPE=offline
-ZOHO_REDIRECT_URI=http://localhost:3000/auth/callback (enter frontend callback url)
+ZOHO_REDIRECT_URI=http://localhost:3000/auth/callback
 ZOHO_BASE_URL=https://accounts.zoho.in
 ZOHO_SCOPE=ZohoProjects.portals.READ,ZohoProjects.projects.ALL,ZohoProjects.tasks.ALL,ZohoProjects.users.READ,ZohoProjects.timesheets.READ
 
@@ -76,7 +76,7 @@ DB_NAME=projex
 CORS_ALLOW_ORIGINS=http://localhost:3000
 CORS_ALLOW_METHODS=*
 CORS_ALLOW_HEADERS=*
-CORS_ALLOW_CREDENTIALS=false
+CORS_ALLOW_CREDENTIALS=true
 
 # Gemini
 GOOGLE_API_KEY=your-google-api-key
@@ -116,7 +116,19 @@ docker compose down -v
 
 ---
 
-## 5. Frontend Setup (local dev)
+## 5. Backend Setup (local dev without Docker)
+
+If you prefer to run the backend natively instead of using Docker, you can use `uv`:
+
+```bash
+cd backend
+uv sync
+uv run fastapi dev app/main.py --port 8080
+```
+
+---
+
+## 6. Frontend Setup (local dev)
 
 The frontend is not yet wired into Docker Compose. Run it locally:
 
@@ -138,7 +150,7 @@ Frontend runs at `http://localhost:3000`.
 
 ---
 
-## 6. Verify Everything is Running
+## 7. Verify Everything is Running
 
 | Service | URL |
 |---------|-----|

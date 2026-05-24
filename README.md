@@ -37,16 +37,21 @@ Every user authenticates with their own Zoho account. No shared credentials, no 
 ## Quick Start
 
 ```bash
-git clone https://github.com/your-username/projex.git
+git clone https://github.com/AdityaTote/projex.git
 cd projex
 
 cp backend/.env.example backend/.env
 # fill in ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, GOOGLE_API_KEY
 
 docker compose up --build
+
+# In a new terminal, start the frontend:
+cd frontend
+bun install
+bun dev
 ```
 
-Backend runs at `http://localhost:8080`. Frontend runs separately — see [docs/local-setup.md](docs/local-setup.md).
+Backend runs at `http://localhost:8080`. Frontend runs at `http://localhost:3000`. See [docs/local-setup.md](docs/local-setup.md) for more details.
 
 ---
 
