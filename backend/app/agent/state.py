@@ -35,3 +35,6 @@ class AgentState(TypedDict):
 
   # output to show in UI, agents write to this
   output: Optional[dict]
+
+  # index of last persisted message in chats table
+  saved_count: Optional[int]

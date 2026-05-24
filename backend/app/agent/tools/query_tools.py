@@ -34,9 +34,22 @@ def make_query_tools(access_token: str, portal_id: int):
       Returns:
           List of tasks as returned by the Zoho API.
     """
+    print(
+      "list_tasks: project_id=",
+      project_id,
+      "page=",
+      page,
+      "per_page=",
+      per_page,
+    )
     data = zoho.list_tasks(access_token, portal_id, project_id, page, per_page)
     if not data:
       raise RuntimeError("Zoho API error: empty response")
+    tasks = getattr(data, "tasks", None)
+    print(
+      "list_tasks: returned_count=",
+      len(tasks) if isinstance(tasks, list) else "unknown",
+    )
     return data.model_dump()
 
 

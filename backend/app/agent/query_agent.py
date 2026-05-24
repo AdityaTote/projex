@@ -31,6 +31,14 @@ def _trim_to_last_user(messages: list) -> list:
   return messages
 
 
+def _message_kind(message: object) -> str:
+  if isinstance(message, dict):
+    kind = message.get("type") or message.get("role")
+    return str(kind) if kind is not None else ""
+  kind = getattr(message, "type", None) or getattr(message, "role", None)
+  return str(kind) if kind is not None else ""
+
+
 async def query_agent_node(state: AgentState):
   state_messages = list(state.get("messages") or [])
 
@@ -100,6 +108,10 @@ async def query_agent_node(state: AgentState):
     
     if not response.tool_calls:
       break
+    print(
+      "query_agent: tool calls=",
+      [call.get("name") for call in response.tool_calls],
+    )
         
     try:
       tool_result = await tool_node.ainvoke({"messages": llm_messages})
@@ -107,15 +119,26 @@ async def query_agent_node(state: AgentState):
       raise e
 
     result_msgs = tool_result["messages"]
+    tool_messages = []
 
-    if len(result_msgs) > len(llm_messages):
+    if result_msgs and all(_message_kind(msg).lower() == "tool" for msg in result_msgs):
+      tool_messages = result_msgs
+      llm_messages = llm_messages + tool_messages
+    elif len(result_msgs) > len(llm_messages):
       tool_messages = result_msgs[len(llm_messages):]
       llm_messages = result_msgs
     else:
-      tool_messages = result_msgs[len(llm_messages) - len(response.tool_calls):]
+      start_idx = max(len(llm_messages) - len(response.tool_calls), 0)
+      tool_messages = result_msgs[start_idx:]
       llm_messages = llm_messages + tool_messages
 
     new_messages.extend(tool_messages)
+    print(
+      "query_agent: tool results=",
+      len(tool_messages),
+      "new_messages=",
+      len(new_messages),
+    )
   
   return {
     "messages": new_messages,
